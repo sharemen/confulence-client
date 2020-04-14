@@ -7,7 +7,7 @@
 
 creat 调用方法:
 
-    WikiCreatReq wikiPageReq = new WikiCreatReq();
+   		WikiCreatReq wikiPageReq = new WikiCreatReq();
 		wikiPageReq.setTitle("标题");
 		wikiPageReq.setContent("内容");
 		wikiPageReq.setParentPageId(parentid);//上级页面id，如果不存在则会默认放置spaceSkey对应的空间根目录
@@ -21,7 +21,7 @@ update 调用方法:
 		updateReq.setId(id);//要修改的wiki page id 必填
 		updateReq.setTitle("标题");
 		updateReq.setContent("内容");
-    AuthMethod basicAuth = new BasicAuth(username, password);
+    		AuthMethod basicAuth = new BasicAuth(username, password);
 		WikiPage wikipage= WIKIClient.updateObj(wikihost, basicAuth, updateReq);
     
 find by title 调用方法:
@@ -33,5 +33,5 @@ find by title 调用方法:
     
 find by id 调用方法:
 
-    AuthMethod basicAuth = new BasicAuth(username, password);
+    		AuthMethod basicAuth = new BasicAuth(username, password);
 		WikiPage wikipage= WIKIClient.findByIdObj(wikihost, basicAuth, id);
