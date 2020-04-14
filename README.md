@@ -2,7 +2,8 @@
 
 用于访问Atlassian Confluence 本地部署版本的REST API
 
-实测Confluence 7.3.1可以使用,需要JDK1.8及以上
+实测Confluence 7.3.1可以使用,需要JDK1.8及以上，字符集utf-8
+
 目前仅支持creat,update,find 操作
 
 creat 调用方法:
