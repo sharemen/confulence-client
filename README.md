@@ -4,6 +4,14 @@
 
 实测Confluence 7.3.1可以使用,需要JDK1.8及以上，字符集utf-8
 
+
+添加依赖
+<dependency>
+  <groupId>com.github.sharemen</groupId>
+  <artifactId>confulence-client</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+</dependency>
+
 目前仅支持creat,update,find 操作
 
 creat 调用方法:
