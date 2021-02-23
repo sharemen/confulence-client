@@ -15,6 +15,7 @@ import confulence.client.wiki.ex.WikiClientException;
 import confulence.client.wiki.model.WikiCreatReq;
 import confulence.client.wiki.model.WikiFindReq;
 import confulence.client.wiki.model.WikiPage;
+import confulence.client.wiki.model.WikiPageBean;
 import confulence.client.wiki.model.WikiUpdateReq;
 
 
@@ -33,9 +34,11 @@ public class WIKIClient {
 	//修改文档的rest api 接口
 	private final static  String WIKI_API_UPDATE = "/rest/api/content" ;
 	 
-
+	//查询用户信息
+    private final static  String WIKI_API_GETUSER = "/rest/api/user" ;
 	
-	
+    //查询用户信息所在组的成员列表
+    private final static  String WIKI_API_MEMBEROF = "/rest/api/user/memberof" ;
 	
 	
 	
@@ -226,7 +229,95 @@ public class WIKIClient {
 		return WikiResponse.pasreUpdateResponse( update(wikihost, auth, updateReq));
 	}
 	
+	/**
+	  *     查询用户信息
+	 * @param wikihost
+	 * @param auth
+	 * @param username
+	 * @return
+	 * @throws WikiClientException
+	 */
+	public static String getUser(String wikihost,AuthMethod auth,String username) throws WikiClientException {
+		String responseRet = null;
+		Map<String, String> headers = new HashMap<String,String>();
+
+		 
+			headers.put("Content-Type", "application/json;charset=utf-8");
+			//登录
+			headers = logon(headers,auth);
+			HttpResponse httpResponse;
+			try {
+				StringBuilder url = new StringBuilder();
+				url.append(WIKI_API_GETUSER);
+				if(username!=null && !"".equals(username)) {
+					Map<String,String> param = new HashMap<String,String>();
+					param.put("username", username);
+					httpResponse = HttpUtils.doGet(wikihost, url.toString(), headers, param);
+					responseRet = HttpUtils.parseString(httpResponse);
+					if(httpResponse.getStatusLine().getStatusCode() != 200) {
+						throw new WikiClientException(responseRet);
+					}
+				}
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		
+		return responseRet;
+	}
 	
+	
+	/**
+	  *     查询用户同组用户列表
+	 * @param wikihost
+	 * @param auth
+	 * @param username
+	 * @return
+	 * @throws WikiClientException
+	 */
+	public static String getUserList(String wikihost,AuthMethod auth,String username,WikiPageBean pagebean) throws WikiClientException {
+		String responseRet = null;
+		Map<String, String> headers = new HashMap<String,String>();
+
+		 
+			headers.put("Content-Type", "application/json;charset=utf-8");
+			//登录
+			headers = logon(headers,auth);
+			HttpResponse httpResponse;
+			try {
+				StringBuilder url = new StringBuilder();
+				url.append(WIKI_API_MEMBEROF);
+				if(username!=null && !"".equals(username)) {
+					
+					
+					Map<String,String> param = new HashMap<String,String>();
+					param.put("username", username);
+					
+					if(pagebean!=null && pagebean.getPage()>0 && pagebean.getPagesize()>0) {
+						param.put("start", String.valueOf((pagebean.getPage()-1)*pagebean.getPagesize()));
+						param.put("limit", String.valueOf(pagebean.getPagesize()));	
+					}else {
+						param.put("start", "0");
+						param.put("limit", "200");	
+					}
+					
+					httpResponse = HttpUtils.doGet(wikihost, url.toString(), headers, param);
+					responseRet = HttpUtils.parseString(httpResponse);
+					if(httpResponse.getStatusLine().getStatusCode() != 200) {
+						throw new WikiClientException(responseRet);
+					}
+				}
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		
+		return responseRet;
+	}
 	
 	/**
 	 * 获取登录headers
